@@ -1,0 +1,97 @@
+LABORATORY 1
+
+Question 1.3.1. Can you name a language which has e REPL?
+Python
+
+Exercise 1.9.1: Consider the expression fact 5 – 1. What result do you expect to get?
+120 – 1 =  119
+
+
+Exercise 1.9.2: Find 2 values for b, b1 and b2, such that b2 = b1 + 1 and slowAdd overflows for b2 but not for b1.
+b1 = 9000; b2 = 18000
+
+Exercise 1.9.3: Evaluate the following expression in the REPL:
+fib 40 - 4.7 seconds
+fib 45 - 42 seconds
+fib 50 - 8’ 46’’
+
+Exercise 1.9.4: Evaluate the following expressions in the REPL:
+fibTail 50 – less than 1 second
+fibTail 100 – less than 1 second
+fibTail 1000 – less than 1 second
+
+
+Exercise 1.10.2:
+
+> ack n m =
+|   if n==0 then
+|   m+1
+|   else if m == 0 then
+|   ack (n-1) 1
+|   else
+|   ack (n-1) (ack n (m-1))
+|   
+
+<function> : number -> number1 -> number1
+> 
+> ack 1 1
+3 : number
+> ack 2 3
+9 : number
+> ack 3 3
+61 : number
+> ack 4 1
+RangeError: Maximum call stack size exceeded
+> ack 3 10
+8189 : number
+
+
+
+Exercise 1.10.3:
+
+> sudan n x y =
+|   if n==0 then
+|   x+y
+|   else if n>0 && y==0 then
+|   x
+|   else
+|   sudan (n-1) (sudan n x (y-1)) (y+(sudan n x (y-1)))
+|   
+
+<function> : number -> number1 -> number1 -> number1
+> sudan 1 1 1
+3 : number
+> sudan 1 2 1
+5 : number
+> sudan 1 2 2
+12 : number
+> sudan 2 1 1
+8 : number
+> sudan 2 2 2
+15569256417 : number
+
+
+
+
+Exercise 1.10.1:
+(Am descoperit aici ca nu exista operatorul modulo “%” in Elm, ci trebuie sa folosesc functia modBy. 
+Am avut cateva erori pana cand m-am prins cum vin parametrii. 😊)
+
+> gcd a b =
+|   if a==0 then
+|   b
+|   else
+|   gcd (modBy a b) a
+|   
+
+<function> : Int -> Int -> Int
+> gcd 60 12
+12 : Int
+> gcd 70 12
+2 : Int
+> gcd 70 25
+5 : Int
+> gcd 70 50
+10 : Int
+
+
