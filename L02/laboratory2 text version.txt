@@ -1,0 +1,150 @@
+Exercise 2.2.1:
+Copy and paste the following code in the REPL:
+fullTitle person = (if person.idDr then "Dr. " else "") ++
+person.firstName ++ " " ++ person.lstName
+Try to call the function with an argument such that "Dr. Haskell Curry" is displayed.
+ANSWER: fullTitle {firstName = "Haskell", idDr = True, lstName = "Curry"}
+
+
+Question 2.3.1:
+Does the way type alias works remind you of any keyword in C and C++?
+ANSWER: This reminds me of typedef keyword which was also used to give a type a new name.
+
+
+Exercise 2.3.2: 
+Define a type alias Address, which includes 4 fields: street, number, city and country.
+ANSWER: type alias Address = {street: String, number: Int, city: String, country: String}
+
+
+Exercise 2.3.3:
+Write a function formatAddress , which takes an instance of an Address and displays it
+as street number, city, country.
+ANSWER:
+formatAddress : Address -> String
+| formatAddress add = add.street ++ " " ++ String.fromInt(add.number) ++ ", " ++ add.city ++ ", " ++ add.country
+
+
+Exercise 2.5.1: 
+Try to remove the last line ( _ -> "Better luck next time" ) and check if the code could be compiled.
+ANSWER: We can’t compile without having a catch-all case in the case expression. 
+
+
+Question 2.7.1: What is the cardinality of the Bool type?
+ANSWER: The Bool type has 2 variants: True and False, so its cardinality is 2.
+
+
+Exercise 2.8.1: Define a type for a dice which has six sides.
+ANSWER:
+type DiceFace = One | Two | Three | Four | Five | Six
+> Six
+Six : DiceFace
+
+
+Exercise 2.8.2: Define a type DicePair , which contains 2 Dice , in two ways, one using type aliases and one using type definitions.
+ANSWER:
+> type Dice = One | Two | Three | Four | Five | Six
+> type alias DicePair = {firstDice : Dice, secondDice : Dice}     (type alias)
+> type DicePair = DicePair Dice Dice	(type definition)
+
+
+Exercise 2.8.3:
+Write a function luckyRoll which takes a DicePair and returns a String . It should
+return “Very lucky” if the roll contains 2 sixes, “Lucky” it contains one six and “Meh”
+otherwise.
+
+ANSWER:
+luckyRoll : DicePair -> String
+| luckyRoll r =
+|   if r.firstDice == Six && r.secondDice == Six then
+|   "Very lucky"
+|   else if r.firstDice == Six || r.secondDice == Six then
+|   "Lucky"
+|   else
+|   "Meh"
+|   
+<function> : DicePair -> String
+> luckyRoll (DicePair One Six)
+"Lucky" : String
+
+
+
+Exercise 2.8.4: Write the function areaRec for ShapeRec
+
+I used the function which implements Heron's formula for computing the area of a triangle knowing the edges from the laboratory notes.
+Then I used case expression for computing the area depending on the type of shape: circle, rectangle or triangle.
+
+> heronShort a b c =
+|   let s = (a+b+c)/2
+|   in
+|   sqrt (s * (s-a) * (s-b) * (s-c))
+|   
+<function> : Float -> Float -> Float -> Float
+> 
+> heronShort 2 2 3
+1.984313483298443 : Float
+> 
+> type ShapeRec = CircleRec {radius : Float} | RectangleRec {width : Float, height : Float} | TriangleRec {sideA : Float, sideB : Float, sideC : Float}
+> areaRec : ShapeRec -> Float
+| areaRec shapeRec =
+|   case shapeRec of
+|   CircleRec {radius} -> pi * radius * radius
+|   RectangleRec {width, height} -> width * height
+|   TriangleRec {sideA, sideB, sideC} -> heronShort sideA sideB sideC
+|   
+<function> : ShapeRec -> Float
+> 
+> areaRec (CircleRec {radius = 2})
+12.566370614359172 : Float
+> areaRec (TriangleRec {sideA = 3, sideB = 4, sideC = 5})
+6 : Float
+> 
+
+
+
+Exercise 2.8.6: Write a function validateCard : Date -> CreditCard -> Bool which checks if a credit card is valid. 
+1. Define the Date type, which stores the month and year until a card is valid.
+2. Define the CardNumber type, which stores the 16 digits of the card as 2 Int s of 8 digits each. This is necessary because a 16 digit, positive integer can’t be stored in a 32 bit Int type.
+3. Define the CreditCard type for a credit card which has:  an issuer (Visa or Mastercard)  a card number, which is of type CardNumber  an expiration date, which is of type Date 32 
+4. Write a function isDateAfter to check if the second date is after the first date. 
+5. Write a function isCardNumberValid to check if the credit card number is valid: 
+(a) To check that the whole number is valid, use the Luhn algorithm. 
+(b) If the INN (Issuer Identification Number) matches the card issuer:  Visa cards start with the digit 4  Mastercard cards have the first 4 digits between 2221 and 2720 or have the first 2 digits between 51 and 55
+
+ANSWER: Firstly, there are the type declarations, as required in exercises 1,2,3. 
+type alias Date = {month: Int, year: Int}
+> type alias CardNumber = {firstEight: Int, secondEight: Int}
+> type Issuer = Visa | Mastercard
+> type alias CreditCard = {issuer: Issuer, cardNumber: CardNumber, expirationDate: Date}
+
+I also managed to compute the isDateAfter function from exercise 4.
+> isDateAfter: Date -> Date -> Bool
+| isDateAfter date1 date2 =
+|   if date2.year == date1.year && date2.month > date1.month then
+|   True
+|   else if date2.year == date1.year && date2.month < date1.month then
+|   False
+|   else if date2.year > date1.year then
+|   True
+|   else
+|   False
+|   
+
+
+<function> : Date -> Date -> Bool
+> isDateAfter (Date 4 2002) (Date 5 2002)
+True : Bool
+> isDateAfter (Date 4 2002) (Date 2 2002)
+False : Bool
+> isDateAfter (Date 4 2002) (Date 2 2005)
+True : Bool
+> isDateAfter (Date 4 2002) (Date 4 2005)
+True : Bool
+> isDateAfter (Date 4 2002) (Date 4 2000)
+False : Bool
+
+
+
+
+
+
+
