@@ -1,0 +1,173 @@
+Exercise 3.4.1: Write a function len that returns that length of a list (i.e., the number of elements in it).
+ANSWER:
+> lengthOfList l =
+|   case l of
+|    [] -> 0
+|    x::xs -> 1 + lengthOfList xs
+|   
+<function> : List a -> number
+> 
+> lengthOfList [1,2,3,4,5,6,7,10]
+8 : number
+
+
+
+Exercise 3.4.2: Find two values for b , b1 and b2 such that b2 = b1 + 1 and countFromTo 1 b overflows for b2, but it doesn’t for b1.
+ANSWER: b1 = 3700; b2 = 3701
+
+
+
+Exercise 3.5.1: Write a function with the signature safeDiv : Int -> Int -> Maybe Int that returns
+Nothing when we try to divide by 0 and the result wrapped in Just otherwise.
+ANSWER:
+> safeDiv : Int -> Int -> Maybe Int
+| safeDiv x y =
+|   case y of
+|    0 -> Nothing
+|    _ -> Just (x//y)
+|   
+<function> : Int -> Int -> Maybe Int
+> safeDiv 10 4
+Just 2 : Maybe Int
+> safeDiv 10 0
+Nothing : Maybe Int
+
+(aici am avut eroare pt ca am folosit / in loc de // (acum stiu ca / e doar pt float :) ))
+
+
+
+Exercise 3.5.2: Rewrite the len function defined above in a tail-recursive style, with the name lenTail.
+ANSWER:
+> lenTail l =
+|   let
+|    lenHelper list index =
+|     case list of
+|      [] -> index
+|      x::xs -> lenHelper xs (index+1)
+|   in
+|    lenHelper l 0
+|   
+<function> : List a -> number
+> lenTail [1,2,3,4,5]
+5 : number
+
+
+
+Exercise 3.5.3: Implement a function last that returns the last element of a list.
+ANSWER: (M-am folosit de functia definita in lab head)
+> findLast l =
+|   head (List.reverse l)
+|   
+<function> : List a -> Maybe a
+> findLast [1,2,3,4,5]
+Just 5 : Maybe number
+
+
+
+Exercise 3.5.4: Write a function indexList i l which returns the i th element of the list l .
+ANSWER: (One colleague of mine told me about function drop:) )
+> indexList i l =
+|   if i==1 then
+|    head l
+|   else 
+|    indexList (i-1) (List.drop 1 l)
+|   
+<function> : number -> List a -> Maybe a
+> indexList 4 [4,5,6,7,3,2,1,6]
+Just 7 : Maybe number
+
+
+
+
+Exercise 3.5.5: Write a function fibs start end , which takes a two numbers, start and end and returns a list of the Fibonacci numbers such that: f ibs(start, end) = {f ib(i)|i ∈ N, start ≤ i < end}
+ANSWER:
+> fib n = 
+|   if (n == 0) || (n == 1) then 
+|   1
+|   else (fib (n-1)) + (fib (n-2))
+|   
+<function> : number1 -> number
+
+fibs start end =
+|   let
+|    fibsHelper s e l =
+|     if s < e then
+|      fibsHelper (s+1) e (l ++ [fib s])
+|     else
+|      l
+|   in
+|    fibsHelper start end []
+|   
+<function> : number1 -> number1 -> List number
+> fibs 0 1
+[1] : List number
+> fibs 0 2
+[1,1] : List number
+> fibs 0 3
+[1,1,2] : List number
+> fibs 0 4
+[1,1,2,3] : List number
+> fibs 3 10
+[3,5,8,13,21,34,55]
+    : List number
+
+
+
+Exercise 3.5.6: Modify the fibs function to return a list of tuples, where the first element in each tuple denotes the index of the Fibonacci number and the second the Fibonacci number itself.
+ANSWER:
+> fibs2 start end =
+|   let
+|    fibsHelper s e l =
+|     if s < e then
+|      fibsHelper (s+1) e (l ++ [Tuple.pair s (fib s)])
+|     else
+|      l
+|   in
+|    fibsHelper start end []
+|   
+<function> : number1 -> number1 -> List ( number1, number )
+> fibs2 3 10
+[(3,3),(4,5),(5,8),(6,13),(7,21),(8,34),(9,55)]
+    : List ( number1, number )
+> fibs2 0 2
+[(0,1),(1,1)] : List ( number1, number )
+> fibs2 0 3
+[(0,1),(1,1),(2,2)]
+    : List ( number1, number )
+> fibs2 0 4
+[(0,1),(1,1),(2,2),(3,3)]
+    : List ( number1, number )
+
+
+Question 3.2.1: How is equality handled for float types? Try to evaluate in the REPL: (0/0) and then (0/0) == (0/0) . Does this cause a problem for reference equality?
+ANSWER:
+> (0/0)
+NaN : Float
+> (0/0) == (0/0)
+False : Bool
+
+
+Question 3.3.1: What is known as the “billion dollar mistake” in Computer Science?
+ANSWER:
+I had to look for the answer on the internet and this is what I found: Tony Hoare invented the null reference and he named it himself “billion-dollar mistake” because the programmers all over the world wasted a lot of money to fix the crashes caused by incorrect handling of these null references.
+
+
+Question 3.3.2: Can we know at compile time if any given pointer is null or not in C? Are C++ references different?
+ANSWER:
+I think that we can't because a pointer will have different values at runtime and this value
+could be null (because it is a variable). References in C++ are like constant pointers.
+
+
+Question 3.3.3: Do you know any language that has the solution to the nullability problem built-in as language feature?
+ANSWER:
+C#
+I found an answer on the internet which says that there’s an amazing functional programming library for C# which offers a really solid OptionType as well as nearly every other functional programming basic and they feel like they are parts of the language, really well integrated.
+
+
+Question 3.4.1: What is the time complexity of the following operations on a singly linked list:1. Insert at the list beginning (head)
+2. Insert at the list end (tail)
+3. Get the i th element
+ANSWER:
+1. O(1)
+2. O(1)
+3. O(n) , n - nr of elements
