@@ -1,0 +1,62 @@
+Question 4.4.1: Are foldr and foldl tail recursive?
+ANSWER: foldl e tail recursive pt ca apelul recursiv e ultimul lucru pe care il executa functia (asa am inteles eu ce inseamna tail recursion)
+
+
+Exercise 4.6.1: Implement a function enumerate , with the signature enumerate : List a -> List (Int, a) which returns a list of tuples, where the first member of the tuple is the index of the element in the list and second member is the element at that position in the list.
+ANSWER:
+
+> enumerate : List a -> List (Int,a)
+| enumerate l =
+|   let
+|    enumerateHelper list index =
+|     case list of
+|      [] -> []
+|      x::xs -> (index,x)::(enumerateHelper xs (index+1))
+|   in
+|    enumerateHelper l 0
+|   
+<function> : List a -> List ( Int, a )
+> enumerate [1,2,23,4,45,8,10]
+[(0,1),(1,2),(2,23),(3,4),(4,45),(5,8),(6,10)]
+
+
+
+Exercise 4.6.2: Implement a function repeat n elem , with the signature repeat : Int -> a -> List a which returns a list that contains elem n times.
+ANSWER:
+
+> repeat : Int -> a -> List a
+| repeat n elem =
+|   let
+|    repeatHelper e index =
+|     case index of
+|      0 -> []
+|      _ -> elem :: (repeatHelper elem (index - 1))
+|   in
+|    repeatHelper elem n
+|   
+<function> : Int -> a -> List a
+> repeat 4 1
+[1,1,1,1] : List number
+> repeat 2 "Hello"
+["Hello","Hello"] : List String
+
+
+
+
+Exercise 4.6.3: Implement a function countVowels , with the signature countVowels : String -> Int which returns the number of vowels in a String. 
+ANSWER:
+
+> countVowels : String -> Int
+| countVowels sir =
+|   let
+|    vowels = ['a','e','i','o','u','A','E','I','O','U']
+|    countVowelsHelper listOfCharacters counter =
+|     case listOfCharacters of
+|      [] -> counter
+|      x::xs -> if (List.member x vowels) then (countVowelsHelper xs (counter+1)) else (countVowelsHelper xs counter)
+|   in
+|    countVowelsHelper (String.toList sir) 0
+|   
+<function> : String -> Int
+> countVowels "Ana are mere"
+6 : Int
