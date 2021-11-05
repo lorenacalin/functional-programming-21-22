@@ -1,0 +1,62 @@
+Exercise 5.2.1: Trace the evaluation of applyTwice (inc >> triple) 1 , showing each evaluation step.
+ANSWER:
+Pt. a-mi fi mai usor sa fac tracing-ul, am facut urmatoarele notatii:
+inc x = f(x) = x + 1
+triple = g(x) = x * 3
+
+applyTwice f x = (f >> f) x 
+=> applyTwice (inc >> triple) x = ((inc >> triple) >> (inc >> triple)) x = ((f >> g) >> (f >> g)) x = (g(f(x)) >> g(f(x))) x = (g(f(x))((x+1)*3)) = ((x+1)*3 + 1)*3 = 9x+12
+
+Functia e apelata cu 1 => x=1 => rezultatul este 9+12 = 21.
+
+
+
+Exercise 5.8.1: Reimplement the countVowels function from the last lab, using pipelines and function composition. This implementation should handle lowercase and uppercase vowels too. Write at least two tests to check your implementation.
+ANSWER:
+> isVowel : Char -> Bool
+| isVowel c =
+|   let
+|    vowels = ['a','e','i','o','u','A','E','I','O','U']
+|   in
+|    if (List.member c vowels) then
+|     True
+|    else
+|     False
+
+> countVowels string =
+|   string |> String.toList |> List.filter isVowel |> List.length
+|   
+<function> : String -> Int
+> countVowels "Lorena"
+3 : Int
+
+
+
+
+Exercise 5.8.2: Write a function changePreferenceToDarkTheme : List AccountConfiguration -> List AccountConfiguration which receives a list of accounts and returns a list of accounts where the preferredTheme field is set to the Dark value.
+ANSWER:
+> type ThemeConfig = Light | Dark
+> type alias AccountConfiguration =
+|   {prefferedTheme: ThemeConfig, subscribedToNewsLetter : Bool, twoFactorAuthOn: Bool}
+|   
+> changePreferenceToDarkTheme : List AccountConfiguration -> List AccountConfiguration
+| changePreferenceToDarkTheme listOfAccounts = 
+|   listOfAccounts |> List.map (\account -> {account | prefferedTheme = Dark})
+
+
+
+
+Exercise 5.8.3: Write a function usersWithPhoneNumbers : List User -> List String which receives a list of users and returns a list containing the email addresses the of users who have provided a phone number.
+ANSWER:
+> type alias UserDetails =
+|   {firstName : String, lastName : String, phoneNumber : Maybe String}
+|   
+> type alias User = {id : String, email : String, details : UserDetails}
+> 
+> usersWithPhoneNumber listOfUsers =
+|   listOfUsers |> (List.filter(\x -> ((.details >> .phoneNumber) x) /= Nothing) >> List.map(\x -> .email))
+
+
+
+
+
