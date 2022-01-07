@@ -1,0 +1,24 @@
+-- Exercise 12.1.1 -------------
+char :: Char -> Parser Char
+char c = satisfies (\x -> x == c)
+
+
+-- Exercise 12.1.2 --------------
+digit :: Parser Char
+digit = satisfies (\d -> elem d ['0'..'9'])
+
+
+-- Exercise 12.2.2 -------------
+number :: Parser Int
+number = pMap read (some digit)
+
+
+-- Exercise 12.2.1 ------------
+string' :: String -> Parser String
+string' "" = succeed ""
+string' (c:str) = pMap (\(a,b) -> a:b) (andThen (char c) (string' str)) 
+
+
+-- Exercise 12.3.1 ------------
+pThen :: Parser a -> Parser b -> Parser b
+pThen pa pb = pMap snd (andThen pa pb)
